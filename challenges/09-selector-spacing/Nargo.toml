@@ -1,0 +1,7 @@
+[package]
+name = "ctf_09_selector_spacing"
+type = "bin"
+authors = ["Oak Security"]
+compiler_version = ">=1.0.0"
+
+[dependencies]

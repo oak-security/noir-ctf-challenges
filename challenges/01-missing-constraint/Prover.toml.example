@@ -1,0 +1,2 @@
+secret = "42"
+expected_hash = "74844"

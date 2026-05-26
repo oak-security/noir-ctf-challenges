@@ -1,0 +1,7 @@
+[package]
+name = "ctf_04_range_check"
+type = "bin"
+authors = ["Oak Security"]
+compiler_version = ">=1.0.0"
+
+[dependencies]

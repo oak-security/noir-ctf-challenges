@@ -1,0 +1,7 @@
+[package]
+name = "ctf_01_missing_constraint"
+type = "bin"
+authors = ["Oak Security"]
+compiler_version = ">=1.0.0"
+
+[dependencies]

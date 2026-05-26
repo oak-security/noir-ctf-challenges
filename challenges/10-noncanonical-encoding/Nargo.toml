@@ -1,0 +1,8 @@
+[package]
+name = "ctf_10_noncanonical_encoding"
+type = "bin"
+authors = ["Oak Security"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+bignum = { tag = "v0.8.0", git = "https://github.com/noir-lang/noir-bignum" }

@@ -1,0 +1,6 @@
+target/
+out/
+Prover.toml
+!**/Prover.toml.example
+!solutions/**/Prover.toml
+.DS_Store

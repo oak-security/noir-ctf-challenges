@@ -1,0 +1,7 @@
+[package]
+name = "ctf_08_comptime_bit_decomp"
+type = "bin"
+authors = ["Oak Security"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
