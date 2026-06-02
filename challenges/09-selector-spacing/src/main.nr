@@ -19,7 +19,7 @@ The only public input is `entrypoint` -- which entrypoint is being invoked.
 
 // Registry of entrypoint selector signatures, in declaration order, populated
 // at compile time by the `#[entrypoint]` attribute below.
-comptime mut global REG: [Quoted] = &[];
+comptime mut global REG: [Quoted] = [];
 
 // Build a function's canonical signature string "name(type, type, ...)" from
 // its tokens: start with the name, then append each parameter type.
