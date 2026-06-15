@@ -13,8 +13,8 @@ the real selectors.
 those, never a token-built signature against a hand-written one.)
 */
 
-comptime mut global REG: [Quoted] = &[];          // entrypoint selector signatures
-comptime mut global FORBIDDEN: [Quoted] = &[];    // forbidden selector signatures
+comptime mut global REG: [Quoted] = [];          // entrypoint selector signatures
+comptime mut global FORBIDDEN: [Quoted] = [];    // forbidden selector signatures
 
 comptime fn entrypoint_signature(f: FunctionDefinition) -> Quoted {
     let name = f.name();
