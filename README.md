@@ -6,10 +6,10 @@ Inspired by the Oak Security [CosmWasm CTF](https://github.com/oak-security/cosm
 
 ## Prerequisites
 
-This CTF is pinned to a specific toolchain: `nargo` **1.0.0-beta.22** and `bb` **5.0.0-nightly.20260522**. Other versions are known to crash (e.g., `nargo check` panics, `bb write_vk` aborts) and cause unexpected behavior with the challenges in this repo.
+This CTF is pinned to a specific toolchain: `nargo` **1.0.0** and `bb` **6.0.0**. Other versions are known to crash (e.g., `nargo check` panics, `bb write_vk` aborts) and cause unexpected behavior with the challenges in this repo.
 
-- `nargo` v1.0.0-beta.22: install [`noirup`](https://noir-lang.org/docs/getting_started/quick_start#installation), then `noirup --version 1.0.0-beta.22`.
-- `bb` (Barretenberg) v5.0.0-nightly.20260522: install via noir's own [`install_bb.sh`](https://github.com/noir-lang/noir/blob/v1.0.0-beta.22/scripts/install_bb.sh).
+- `nargo` v1.0.0: install [`noirup`](https://noir-lang.org/docs/getting_started/quick_start#installation), then `noirup --version 1.0.0`.
+- `bb` (Barretenberg) v6.0.0: install via noir's own [`install_bb.sh`](https://github.com/noir-lang/noir/blob/v1.0.0/scripts/install_bb.sh).
 
 Run the environment check [script](scripts/check-env.sh) to verify your install:
 

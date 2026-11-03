@@ -6,8 +6,8 @@ set -euo pipefail
 
 # Pinned toolchain -- the only versions all challenges are verified against.
 # nargo and bb must match this pair, or compilation / proving will crash.
-REQUIRED_NARGO="1.0.0-beta.22"
-REQUIRED_BB="5.0.0-nightly.20260522"
+REQUIRED_NARGO="1.0.0"
+REQUIRED_BB="6.0.0"
 
 check_env() {
     local errors=0
