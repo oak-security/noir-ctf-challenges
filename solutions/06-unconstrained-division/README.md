@@ -34,7 +34,7 @@ fn main(numerator: pub u32, divisor: pub u32, claimed_quotient: pub u32) {
 }
 ```
 
-Then prove with:
+The full exploit circuit is in [`exploit_main.nr`](./exploit_main.nr). Then prove with:
 
 ```toml
 numerator = "10"
@@ -58,7 +58,7 @@ Add the missing remainder bound:
  assert(q == claimed_quotient);
 ```
 
-The full patched circuit is in [`patched_main.nr`](./patched_main.nr).
+The full patched circuit is in [`patched_main.nr`](./patched_main.nr). [`patched_exploit_main.nr`](./patched_exploit_main.nr) is the patched circuit with the malicious hint: with the exploit `Prover.toml`, execution fails at `assert(r < divisor)`.
 
 ## Additional context
 

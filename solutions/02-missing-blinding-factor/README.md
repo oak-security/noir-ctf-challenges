@@ -43,7 +43,7 @@ Bind a high-entropy blinding factor (a "salt") into the commitment, so that brut
  }
 ```
 
-With `salt` drawn from a large random distribution (say, 256 bits), the commitment is now hiding. The full patched circuit is in [`patched_main.nr`](./patched_main.nr). It adds a `salt` input, so it has a different interface than the challenge: copy it over `challenges/02-missing-blinding-factor/src/main.nr` to compile it, but it will not run against this challenge's `verify.sh` / `Prover.toml.example` (those target the unsalted version). To exercise it, supply `move`, a random `salt`, and `commitment = h2(move, salt)`.
+With `salt` drawn from a large random distribution (say, 256 bits), the commitment is now hiding. The full patched circuit is in [`patched_main.nr`](./patched_main.nr). It adds a `salt` input, so it has a different interface than the challenge: copy it over `challenges/02-missing-blinding-factor/src/main.nr` to compile it, but it will not run against this challenge's `verify.sh` / `Prover.toml.example` (those target the unsalted version). To exercise it, supply `move`, a random `salt`, and `commitment = h2(move, salt)`. [`Prover.patched.toml`](./Prover.patched.toml) does this for an opponent who committed to move 2 with a secret salt: the attacker still finds the move, but without the salt the opening fails at the `h2` check.
 
 Some additional notes:
 

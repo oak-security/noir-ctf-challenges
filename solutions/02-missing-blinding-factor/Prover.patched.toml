@@ -1,0 +1,7 @@
+# Inputs for testing patched_main.nr against the exploit.
+# The opponent committed to move 2 with a secret salt (982451653), so
+# commitment = h2(2, 982451653). The attacker brute-forces the move as before
+# but does not know the salt, so the best guess (salt = 0) fails.
+move = "2"
+salt = "0"
+commitment = "965211263254303927"
