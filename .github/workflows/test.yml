@@ -25,7 +25,7 @@ jobs:
     env:
       NOIR_CTF_ALLOW_OTHER_VERSIONS: ${{ matrix.toolchain == 'latest' && '1' || '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Resolve toolchain versions
         id: versions
