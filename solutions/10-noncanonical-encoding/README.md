@@ -22,7 +22,7 @@ fn main(s_limbs: [u128; 3], r_limbs: [u128; 3], claim_slot: pub u32) -> pub Fiel
 }
 ```
 
-`validate_in_range()` only constrains the limbs to fit `MOD_BITS` (the bit-envelope of the modulus). It does **not** enforce `s < n`. So any integer in the gap `[n, 2^MOD_BITS)` passes `validate_in_range` even though it is not a canonical field element.
+`validate_in_range()` only constrains the limbs to fit `MOD_BITS` (the bit-envelope of the modulus). It does **not** enforce `s < n`. So any integer in the gap `[n, 2^MOD_BITS)` passes `validate_in_range` even though it is not a canonical field element. Since noir-bignum v0.11.0, `from_limbs()` runs this same range check automatically, so the explicit `validate_in_range()` calls add no constraints. A circuit that drops them has the same bug.
 
 That means one logical field element has **multiple valid limb encodings**: `s` and `s + n` both pass `validate_in_range`, and they serialize to different limbs. The circuit then treats the value two inconsistent ways:
 
@@ -82,7 +82,7 @@ The full patched circuit is in [`patched_main.nr`](./patched_main.nr). It uses t
 
 ## Additional context
 
-Bug class: **mismatched bit-lengths / non-canonical encodings in foreign-field constraints.** When a value is represented as limbs (BigNum/BigField for secp256k1, secp256r1, RSA, …), limb constraints are not automatic. Always ask, for every foreign-field witness:
+Bug class: **mismatched bit-lengths / non-canonical encodings in foreign-field constraints.** When a value is represented as limbs (BigNum/BigField for secp256k1, secp256r1, RSA, …), a range check on the limbs (automatic in `from_limbs()` since noir-bignum v0.11.0) does not make the value canonical. Always ask, for every foreign-field witness:
 
 1. Is it constrained to be a *canonical* field element (`validate_in_field`), or merely limb-shaped (`validate_in_range`)?
 2. Is the value ever treated two ways — reduced (`==`, arithmetic) in one place, raw (`get_limbs`, `to_bytes`, a hash/nullifier) in another? That asymmetry is what a non-canonical encoding exploits.
