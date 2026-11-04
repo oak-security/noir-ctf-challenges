@@ -42,9 +42,21 @@ WORK="$(mktemp -d)"
 trap 'rm -rf "${WORK}"' EXIT
 cp -r "${ROOT}/challenges" "${ROOT}/scripts" "${ROOT}/solutions" "${WORK}/"
 
-source "${ROOT}/scripts/check-env.sh"
+source "${WORK}/scripts/check-env.sh"
 check_env
+# check-env.sh enables `set -e` when sourced; this driver reports phase
+# failures itself and must keep running, so restore the options set above.
+set +e
 echo ""
+
+# Expand the glob up front so that a pattern matching nothing is a clear
+# error instead of the loop running once over the literal pattern.
+shopt -s nullglob
+dirs=("${WORK}"/challenges/${GLOB}/)
+if [[ ${#dirs[@]} -eq 0 ]]; then
+    echo "ERROR: no challenge matches '${GLOB}' in challenges/." >&2
+    exit 1
+fi
 
 pass=0
 fail=0
@@ -60,7 +72,7 @@ report() { # report <name> <phase> <ok> <log>
     fi
 }
 
-for dir in "${WORK}"/challenges/${GLOB}/; do
+for dir in "${dirs[@]}"; do
     name="$(basename "${dir}")"
     sol="${WORK}/solutions/${name}"
     log="${WORK}/${name}"
@@ -89,6 +101,9 @@ for dir in "${WORK}"/challenges/${GLOB}/; do
     fi
     [[ -f "${sol}/Prover.patched.toml" ]] && cp "${sol}/Prover.patched.toml" "${dir}/Prover.toml"
     if expected="$(expected_failure "${name}")"; then
+        # Only `nargo execute`: this phase checks that the circuit's
+        # constraints reject the exploit, which execution already decides
+        # (no proof is needed for a circuit that aborts).
         if (cd "${dir}" && rm -rf target && nargo execute) >"${log}.patched.log" 2>&1; then
             echo "patched circuit accepted the exploit" >>"${log}.patched.log"
         elif grep -qF -- "${expected}" "${log}.patched.log"; then

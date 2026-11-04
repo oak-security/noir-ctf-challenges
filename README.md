@@ -76,7 +76,7 @@ Roughly ordered easiest → hardest.
 
 ## Testing the challenges
 
-For maintainers: [`scripts/test-all.sh`](scripts/test-all.sh) runs every challenge against its solution (example inputs, exploit, and patched circuit) and checks that each patched circuit rejects the exploit at the expected place. CI runs it on each push and PR with the pinned toolchain, and weekly with the newest Noir release.
+For maintainers: [`scripts/test-all.sh`](scripts/test-all.sh) runs every challenge against its solution (example inputs, exploit, and patched circuit) and checks that each patched circuit rejects the exploit at the expected place. CI runs it on pushes to `main` and on PRs with the pinned toolchain, and weekly with the newest Noir release.
 
 ```sh
 scripts/test-all.sh            # all challenges

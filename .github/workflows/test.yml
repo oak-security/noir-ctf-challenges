@@ -41,6 +41,10 @@ jobs:
             nargo="${tag#v}"
             bb="$(curl -fsSL "https://raw.githubusercontent.com/noir-lang/noir/${tag}/scripts/install_bb.sh" \
                   | sed -n 's/^VERSION="\(.*\)"$/\1/p')"
+            if [[ -z "${bb}" ]]; then
+              echo "Could not parse the bb VERSION from noir ${tag} scripts/install_bb.sh (format changed?)." >&2
+              exit 1
+            fi
           fi
           echo "nargo ${nargo}, bb ${bb}"
           echo "nargo=${nargo}" >>"${GITHUB_OUTPUT}"
