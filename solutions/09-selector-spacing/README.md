@@ -18,7 +18,7 @@ comptime fn entrypoint_signature(f: FunctionDefinition) -> Quoted {
     let mut sig = quote { $name $opening_bracket };
     for i in 0..params.len() {
         if i != 0 { sig = quote { $sig $comma }; }
-        let ty = params[i].1;
+        let ty = params[i].typ();
         sig = quote { $sig $ty };
     }
     sig = quote { $sig $closing_bracket };

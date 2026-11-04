@@ -6,10 +6,10 @@ Inspired by the Oak Security [CosmWasm CTF](https://github.com/oak-security/cosm
 
 ## Prerequisites
 
-This CTF is pinned to a specific toolchain: `nargo` **1.0.0-beta.22** and `bb` **5.0.0-nightly.20260522**. Other versions are known to crash (e.g., `nargo check` panics, `bb write_vk` aborts) and cause unexpected behavior with the challenges in this repo.
+This CTF is pinned to a specific toolchain: `nargo` **1.0.0** and `bb` **6.0.0**. All challenges are verified against this pair. Use exactly these versions: `nargo` and `bb` must match each other, and the challenges use compile-time APIs that change between Noir releases.
 
-- `nargo` v1.0.0-beta.22: install [`noirup`](https://noir-lang.org/docs/getting_started/quick_start#installation), then `noirup --version 1.0.0-beta.22`.
-- `bb` (Barretenberg) v5.0.0-nightly.20260522: install via noir's own [`install_bb.sh`](https://github.com/noir-lang/noir/blob/v1.0.0-beta.22/scripts/install_bb.sh).
+- `nargo` v1.0.0: install [`noirup`](https://noir-lang.org/docs/getting_started/quick_start#installation), then `noirup --version 1.0.0`.
+- `bb` (Barretenberg) v6.0.0: install via noir's own [`install_bb.sh`](https://github.com/noir-lang/noir/blob/v1.0.0/scripts/install_bb.sh).
 
 Run the environment check [script](scripts/check-env.sh) to verify your install:
 
@@ -36,7 +36,8 @@ noir-ctf/
 │   └── 10-noncanonical-encoding/
 ├── solutions/                       # one folder per challenge (spoilers!)
 ├── scripts/
-│   └── check-env.sh                 # environment check
+│   ├── check-env.sh                 # environment check
+│   └── test-all.sh                  # maintainer test: every challenge vs. its solution
 ├── LICENSE
 └── README.md
 ```
@@ -72,6 +73,15 @@ Roughly ordered easiest → hardest.
 | 08 | [Comptime Range Gadget](challenges/08-comptime-bit-decomp/) | Quote/unquote accumulation bug in a generated range check |
 | 09 | [Selector Spacing Bypass](challenges/09-selector-spacing/) | Quote token-padding mismatch in compile-time selector strings |
 | 10 | [Non-Canonical Encoding](challenges/10-noncanonical-encoding/) | Foreign-field `validate_in_range` vs `validate_in_field` |
+
+## Testing the challenges
+
+For maintainers: [`scripts/test-all.sh`](scripts/test-all.sh) runs every challenge against its solution (example inputs, exploit, and patched circuit) and checks that each patched circuit rejects the exploit at the expected place. CI runs it on pushes to `main` and on PRs with the pinned toolchain, and weekly with the newest Noir release.
+
+```sh
+scripts/test-all.sh            # all challenges
+scripts/test-all.sh '06-*'     # one challenge
+```
 
 ## License
 

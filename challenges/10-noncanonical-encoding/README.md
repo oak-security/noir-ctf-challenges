@@ -18,7 +18,7 @@ Commit(s, r) = s * a + r * b   (mod n)
 
 ### Foreign fields
 
-Aztec circuits run over BN254 (a ~254-bit prime). Arithmetic over *other* moduli (secp256k1, RSA, …) uses [`noir-bignum`](https://github.com/noir-lang/noir-bignum): a value is an array of 120-bit limbs. Limb constraints are **not** automatic; you call them explicitly, and they differ:
+Aztec circuits run over BN254 (a ~254-bit prime). Arithmetic over *other* moduli (secp256k1, RSA, …) uses [`noir-bignum`](https://github.com/noir-lang/noir-bignum): a value is an array of 120-bit limbs. `from_limbs()` range-checks the limbs automatically (the same check as `validate_in_range()`). The canonical check is **not** automatic; you call it explicitly. The two checks differ:
 
 | | guarantees |
 |---|---|

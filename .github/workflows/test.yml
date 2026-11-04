@@ -1,0 +1,63 @@
+name: Test challenges
+
+# Pushes and PRs test the pinned toolchain (scripts/check-env.sh).
+# The weekly run tests the newest stable nargo and the bb that it pins, as an
+# early warning for the next toolchain bump.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.toolchain }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: ${{ fromJSON(github.event_name == 'schedule' && '["latest"]' || github.event_name == 'workflow_dispatch' && '["pinned","latest"]' || '["pinned"]') }}
+    env:
+      NOIR_CTF_ALLOW_OTHER_VERSIONS: ${{ matrix.toolchain == 'latest' && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Resolve toolchain versions
+        id: versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "${{ matrix.toolchain }}" == pinned ]]; then
+            source scripts/check-env.sh
+            nargo="${REQUIRED_NARGO}"
+            bb="${REQUIRED_BB}"
+          else
+            tag="$(gh release view --repo noir-lang/noir --json tagName --jq .tagName)"
+            nargo="${tag#v}"
+            bb="$(curl -fsSL "https://raw.githubusercontent.com/noir-lang/noir/${tag}/scripts/install_bb.sh" \
+                  | sed -n 's/^VERSION="\(.*\)"$/\1/p')"
+            if [[ -z "${bb}" ]]; then
+              echo "Could not parse the bb VERSION from noir ${tag} scripts/install_bb.sh (format changed?)." >&2
+              exit 1
+            fi
+          fi
+          echo "nargo ${nargo}, bb ${bb}"
+          echo "nargo=${nargo}" >>"${GITHUB_OUTPUT}"
+          echo "bb=${bb}" >>"${GITHUB_OUTPUT}"
+
+      - name: Install nargo and bb
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
+          ~/.nargo/bin/noirup --version "${{ steps.versions.outputs.nargo }}"
+          curl -fsSL https://raw.githubusercontent.com/AztecProtocol/aztec-packages/refs/heads/next/barretenberg/bbup/install | bash
+          ~/.bb/bbup -v "${{ steps.versions.outputs.bb }}"
+          echo "${HOME}/.nargo/bin" >>"${GITHUB_PATH}"
+          echo "${HOME}/.bb" >>"${GITHUB_PATH}"
+
+      - name: Test all challenges
+        run: scripts/test-all.sh
